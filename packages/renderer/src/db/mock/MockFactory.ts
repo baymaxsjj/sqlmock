@@ -14,14 +14,15 @@ class MockFactory {
     this.projectTable = projectTable;
   }
   private mockData(tableRule: Object) {
-    const mockData = Mock.mock(tableRule);
-    const mockStr = JSON.stringify(mockData);
-    const funcStr = mockStr.replace(/{{(.*?)}}/, '"+($1)+"');
+    // const mockData = Mock.mock(tableRule);
+    // console.log('mockData',mockData)
+    const mockStr = JSON.stringify(tableRule);
+    const funcStr = mockStr.replace(/{{(.*?)}}/, '"+$1+"');
     return funcStr;
   }
   getMock():Object{
     const tableAttrs=this.projectTable.content
-    let mockObj:object={}
+    let mockObj:Object={}
     for(let i=0,len=tableAttrs.length;i<len;i++){
       let row=tableAttrs[i]
       if(!row.Hidden){
@@ -34,7 +35,6 @@ class MockFactory {
     const projectStore = useProjectStore();
     const delay = this.projectTable.delay | projectStore.config.delay;
     console.log("getMock",this.getMock())
-
     const mockStr = this.mockData(this.getMock());
     console.log("mockStr",mockStr)
     const str = `try {
@@ -50,8 +50,9 @@ class MockFactory {
                         return 
                     }
                     CurrRunCount++;
+
                     mockThis.resolve({
-                        data:${mockStr},
+                        data:Mock.mock(${mockStr}),
                         runCount:CurrRunCount
                     })
                 } catch (error) {
@@ -74,7 +75,7 @@ class MockFactory {
       this.reject(error);
     }
   }
-  private resolve(value: any) {
+  private resolve(value: Object) {
     if (this.successCallback) {
       this.successCallback(value);
     }

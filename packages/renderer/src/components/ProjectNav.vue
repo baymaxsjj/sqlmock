@@ -1,16 +1,28 @@
 <template>
-  <div class="project">
-    <div class="project-add">
-      <a-button type="primary" @click="visible = true" size="large">
+  <!-- <a-button type="primary" @click="visible = true" long size="large">
         <template #icon>
           <icon-plus />
         </template>
         创建项目
-      </a-button>
-    </div>
-    <hr />
-    <ProjectItemVue class="project-list" />
-  </div>
+      </a-button> -->
+  <a-menu class="project" mode="pop" show-collapse-button breakpoint="xl">
+    <a-menu-item @click="visible = true">
+      <template #icon>
+          <icon-plus />
+        </template>
+        创建项目
+    </a-menu-item>
+    <template v-for="item of projects" :key="item.url">
+      <router-link :to="`/${item.name}/tables`">
+        <a-menu-item>
+          <template #icon>
+            <icon-code-sandbox />
+          </template>
+          {{ item.name }}
+        </a-menu-item>
+      </router-link>
+    </template>
+  </a-menu>
   <a-modal v-model:visible="visible" @ok="addProject">
     <template #title> 创建项目 </template>
     <a-form :model="form">
@@ -20,7 +32,7 @@
       <a-divider />
       <a-form-item field="name" label="选择数据库">
         <a-select @input-value-change="dbChange" v-model="form.type" placeholder="选择数据库类型">
-          <a-option v-for="(item,key) of dbTypeList" :value="key" :label="item" />
+          <a-option v-for="(item, key) of dbTypeList" :value="key" :label="item" />
         </a-select>
       </a-form-item>
       <a-form-item field="name" label="主机地址">
@@ -54,6 +66,8 @@ import ProjectItemVue from "./ProjectItem.vue";
 import dbmock from "../db/operation/index";
 import dbMocke from "../db/operation/index";
 import useProjectStore from "../stores/project";
+
+
 let dbAdapter: baseDbAdapter
 const form = reactive({
   name: "",
@@ -71,6 +85,8 @@ const dbChange = () => {
 
 }
 const projectStore = useProjectStore()
+const projects = projectStore.getProjects
+
 //添加项目
 const addProject = (): void => {
   const hasProject = projectStore.getProjectByName(form.name);
@@ -82,13 +98,13 @@ const addProject = (): void => {
       simple: true,
       onOk() {
         console.log("6666")
-        projectStore.addProject(form.name,form.type,getConnInfo())
+        projectStore.addProject(form.name, form.type, getConnInfo())
         visible.value = false
         Message.success("创建成功")
       }
     });
   } else {
-    projectStore.addProject(form.name,form.type, getConnInfo())
+    projectStore.addProject(form.name, form.type, getConnInfo())
     visible.value = false
     Message.success("创建成功")
   }
@@ -117,21 +133,8 @@ const testConn = () => {
 </script>
 <style lang="less" scoped>
 .project {
-  background-color: var(--color-fill-2);
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  min-width: 300px;
-
-  &-add {
-    margin: 10px auto;
-    display: flex;
-    justify-content: center;
-  }
-
-  &-list {
-    flex-grow: 1;
-    overflow-y: auto;
-  }
+  overflow-y: auto;
+  max-width: 200px;
 }
 </style>

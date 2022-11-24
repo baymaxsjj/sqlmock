@@ -107,7 +107,7 @@ const useProjectStore = defineStore({
                 return project.adapter
             }else {
                 const adapter=dbmock.getAdapterByUuid(project.adpterUUID,project.connInfo)
-                this.project[index].adapter=adapter
+                project.adapter=adapter
                 return adapter
             }
         },

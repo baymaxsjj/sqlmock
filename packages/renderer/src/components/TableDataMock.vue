@@ -6,34 +6,37 @@
           <icon-save />
         </template>
       </a-button>
-      <a-button size="large" type="outline" status="warning" @click="runMock">运行
+      <a-button size="large" type="outline" status="warning" @click="runMock(false)">运行
         <template #icon>
           <icon-play-arrow-fill />
         </template>
       </a-button>
-      <a-button size="large" type="outline">测试<template #icon>
+      <a-button size="large" type="outline" @click="runMock(true)">测试<template #icon>
           <icon-record />
-        </template></a-button>
+        </template>
+      </a-button>
 
-      <a-button size="large" type="outline" @click="editVisible=true">Js(Ts)<template #icon>
+      <a-button size="large" type="outline" @click="editVisible = true">Js(Ts)<template #icon>
           <icon-code />
         </template></a-button>
+        <a-input-number style="width:160px;margin: 0 10px;" v-model="tableAttr.runCount" placeholder="运行次数" mode="button" size="large" class="input-demo" />
+        <a-input-number style="width:160px;" v-model="tableAttr.delay" placeholder="运行延迟" mode="button" size="large" class="input-demo" />
 
     </div>
     <a-table class="data-table" :columns="columns" :data="tableAttr.content" :loading="loading" :pagination="false"
       :scroll="scrollPercent" column-resizable>
       <template #Remove="{ record, rowIndex }">
         <a-button class="oper_btn" type="text" size="large" shape="circle"
-          :disabled="!record.Null && (record.Default == null)" @click="removeField(record.Field)">
+          :disabled="getIsRemove(record)" @click="record.Hidden=!record.Hidden">
           <template #icon>
-            <icon-close />
-
+            <icon-check v-if="record.Hidden"/>
+            <icon-close v-else="record.Hidden"/>
           </template>
         </a-button>
       </template>
       <template #Mock="{ record, rowIndex }">
         <a-trigger trigger="focus" style="{min-width:500px}">
-          <a-input placeholder="Focus on me" v-model="tableAttr.content[rowIndex].Mock" />
+          <a-input placeholder="Focus on me" v-model="record.Mock" />
           <template #content>
             <div class="demo-basic">
               <!-- {{record}} -->
@@ -49,15 +52,12 @@
       <template #title>
         运行脚本
       </template>
-      <codemirror
-        v-model="tableAttr.runJs"
-        placeholder="Code gose here..."
-        :extensions="extensions"
-        :style="{ height: '400px' }"
-        :autofocus="true"
-        :indent-with-tab="true"
-        :tabSize="2"
-      />
+      <codemirror v-model="tableAttr.runJs" placeholder="Code gose here..." :extensions="extensions"
+        :style="{ height: '400px' }" :autofocus="true" :indent-with-tab="true" :tabSize="2" />
+    </a-modal>
+    <a-modal v-model:visible="resultVisible" title="模拟结果" fullscreen>
+      <a-table :data="mockResult" :columns="getTableColumn">
+      </a-table>
     </a-modal>
   </div>
 </template>
@@ -65,8 +65,8 @@
 import { Codemirror } from 'vue-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import { oneDark } from '@codemirror/theme-one-dark'
-import { Message, TableColumnData, TableData } from "@arco-design/web-vue";
-import { reactive, ref } from "vue-demi";
+import { Message, TableColumnData, TableData ,Notification} from "@arco-design/web-vue";
+import { reactive, ref,computed } from "vue";
 import { useRoute } from "vue-router";
 import dbmock from "../db/operation";
 import MockFactory from "../db/mock/MockFactory"
@@ -77,43 +77,95 @@ import useProjectStore, { ProjectTable } from "../stores/project";
 const route = useRoute();
 const loading = ref(true);
 const tableName: string = route.params.table as string;
-const projectName:string =route.params.name as string;
+const projectName: string = route.params.name as string;
 const projectStore = useProjectStore();
-const project=projectStore.getProjectByName(projectName)
-const tableMock=project.tableMock[tableName]
-const tableAttr: ProjectTable = reactive({
-  name:tableName,
-  content:tableMock?.content,
-  runJs: "",
-  runCount:10,
-  delay:10
-});
+const project = projectStore.getProjectByName(projectName)
+const tableMock = project.tableMock[tableName]
+const editVisible = ref(false)
+const mockResult=ref<Array<Object>>([])
 
-let dbAdapter:baseDbAdapter
-const runMock = () => {
+const resultVisible=ref(false)
+
+const tableAttr: ProjectTable = reactive({
+  name: tableName,
+  content: tableMock?.content,
+  runJs: tableMock?.runJs??"",
+  runCount: tableMock?.runCount??10,
+  delay: tableMock?.delay??10
+});
+const getTableColumn=computed(()=>{
+  const columns:Array<TableColumnData>=[]
+  tableAttr.content.forEach((value)=>{
+    if(!value.Hidden){
+      columns.push({
+        title:value.Field,
+        dataIndex:value.Field
+      })
+    }
+  })
+  columns.push({
+    title:'结果',
+    dataIndex:'insert-result'
+  })
+  return columns;
+})
+
+let dbAdapter: baseDbAdapter
+const runMock = (isTest=false) => {
   const mock = new MockFactory(tableAttr);
-  mock.then((res: any) => {
-    console.log("then", res)
-    dbAdapter.insert(tableName,res.data).then((res=>{
-      console.log(res)
-    }))
+  resultVisible.value=true
+  mockResult.value=[]
+  mock.then((data: any) => {
+    const mockDate=data.data;
+    if(isTest){
+      mockDate['insert-result']='测试'
+      mockResult.value.push(mockDate)
+    }else{
+      dbAdapter.insert(tableName, mockDate).then((res => {
+        mockDate['insert-result']='成功'
+        mockResult.value.push(mockDate)
+      })).catch((err)=>{
+        mockDate['insert-result']='失败：'+err
+        mockResult.value.push(mockDate)
+      })
+    }
+    
   }).catch((err: any) => {
     // mock.stopRunMock()
     console.log("catch", err)
+    Notification.error(err)
   }).startMock()
 }
-const removeField = (field: string) => {
-  console.log(field)
-  for (let i = 0, len = tableAttr.content.length; i < len; i++) {
-    if (tableAttr.content[i].Field == field) {
-      tableAttr.content[i].Hidden = true
-      break;
-    }
+const getIsRemove = (record:any) => {
+  if( record.Extra=='auto_increment'){
+    return false
+  }else if(record.Default != null){
+    return false;
+  }else if(record.Null){
+    return false;
+  }
+  return true;
+}
+// 合并字段
+const mergeFields=()=>{
+  const tableContent=tableMock?.content;
+  if(tableContent){
+    let row;
+    tableAttr.content.forEach((value,index)=>{
+      for(let i=0;i<tableContent.length;i++){
+        row=tableContent[i];
+        if(value.Field==row.Field){
+          value.Mock=row.Mock;
+          value.Hidden=row.Hidden;
+          break
+        }
+      }
+    })
   }
 }
 //保存项目
-const saveProTab=()=>{
-  project.tableMock[tableName]=tableAttr
+const saveProTab = () => {
+  project.tableMock[tableName] = tableAttr
   projectStore.updatedProject(project)
   Message.success("保存成功")
 }
@@ -121,7 +173,6 @@ const extensions = [javascript(), oneDark]
 const scrollPercent = {
   y: "100%"
 };
-const editVisible = ref(false)
 const columns: Array<TableColumnData> = [
   {
     title: "移除",
@@ -140,7 +191,9 @@ const columns: Array<TableColumnData> = [
       }
       ],
       defaultFilteredValue: ['0'],
-      filter: (value: string, record: TableData) => {
+      filter: (filteredValue: string[], record: TableData) => {
+        console.log(record)
+        const value=filteredValue[0]
         if (value == '2') {
           return true
         } else if (record.Hidden && value == '1') {
@@ -164,7 +217,7 @@ const columns: Array<TableColumnData> = [
   {
     title: "Mock",
     slotName: "Mock",
-    width:250
+    width: 250
   },
   {
     title: "索引",
@@ -187,11 +240,12 @@ const columns: Array<TableColumnData> = [
 const getDbAdapter = () => {
   const name: string = route.params.name as string;
   loading.value = true;
-  dbAdapter =projectStore.getProjectDbAdapter(name)
+  dbAdapter = projectStore.getProjectDbAdapter(name)
   dbAdapter
     .getTablesAttribute(tableName)
     .then((res: Array<TableAttributes>) => {
       tableAttr.content = res;
+      mergeFields()
       loading.value = false;
     })
     .catch((e) => {

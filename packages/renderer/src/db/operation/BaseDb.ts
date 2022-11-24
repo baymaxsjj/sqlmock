@@ -44,7 +44,7 @@ interface baseDbAdapter{
      * @param table 表名
      * @param mock 
      */
-    insert:(table:string,mock:object)=>Promise<any>,
+     insert:(table:string,mock:object)=>Promise<any>,
 }
 /**
  * 数据库插件
