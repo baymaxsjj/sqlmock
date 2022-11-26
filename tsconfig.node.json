@@ -1,12 +1,7 @@
 {
+  "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
+  "include": ["electron.vite.config.*", "src/main/*", "src/preload/*"],
   "compilerOptions": {
-    "target": "ESNext",
-    "composite": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "jsx": "preserve",
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
-  },
-  "include": ["package.json", "electron"]
+    "composite": true
+  }
 }

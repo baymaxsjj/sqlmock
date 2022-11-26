@@ -1,21 +1,4 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "jsx": "preserve",
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "sourceMap": true,
-    "baseUrl": "./",
-    "strict": true,
-    "paths": {},
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
-  },
-  "include": ["src"],
-  "references": [
-    { "path": "./tsconfig.node.json" }
-  ]
+  "files": [],
+  "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }]
 }

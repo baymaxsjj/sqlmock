@@ -1,3 +1,0 @@
-interface mockExample{
-    explain:String,
-}
