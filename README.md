@@ -36,39 +36,39 @@ Mysql 5.Xx
 
 #####  创建项目、连接数据库
 
-![image-20221127195055640](./src/renderer//src/assets/image/doc/image-20221127195055640.png)
+![image-20221127195055640](./src/renderer/src/assets/image/doc/image-20221127195055640.png)
 #####  选择数据表
 
-![image-20221127195114876](./src/renderer//src/assets/image/doc\image-20221127195114876.png)
+![image-20221127195114876](./src/renderer/src/assets/image/doc/image-20221127195114876.png)
 #####  编写脚本（可选），`mockCount`运行次数、`Mock`mock.js
 
-![image-20221127195420902](./src/renderer//src/assets/image/doc\image-20221127195420902.png)
+![image-20221127195420902](./src/renderer/src/assets/image/doc/image-20221127195420902.png)
 #####  编写表达式 @mock、{{表达式}}、{{Mock.xxx}}
 注意@mock和{{}}一起使用时之间加个空格，要不然@mock无法使用
 
-![image-20221127195900097](./src/renderer//src/assets/image/doc\image-20221127195900097.png)
+![image-20221127195900097](./src/renderer/src/assets/image/doc/image-20221127195900097.png)
 #####  测试数据是否正常
 
-![image-20221127200239231](./src/renderer//src/assets/image/doc\image-20221127200239231.png)
+![image-20221127200239231](./src/renderer/src/assets/image/doc/image-20221127200239231.png)
 #####  运行
 如果批量插入有问题，请关闭批量
 单次插入次数过多有连接问题
 
-![image-20221127195505435](./src/renderer//src/assets/image/doc\image-20221127195505435.png)
+![image-20221127195505435](./src/renderer/src/assets/image/doc/image-20221127195505435.png)
 
 ### 表结构文档导出
 
 选择需要导出的表
 
-![image-20221127200356327](./src/renderer//src/assets/image/doc\image-20221127200356327.png)
+![image-20221127200356327](./src/renderer/src/assets/image/doc/image-20221127200356327.png)
 
 ##### Word
 
-![image-20221127200534761](./src/renderer//src/assets/image/doc\image-20221127200534761.png)
+![image-20221127200534761](./src/renderer/src/assets/image/doc/image-20221127200534761.png)
 
 ##### Markdown
 
-![image-20221127200502866](./src/renderer//src/assets/image/doc\image-20221127200502866.png)
+![image-20221127200502866](./src/renderer/src/assets/image/doc/image-20221127200502866.png)
 
 ### Instal
 
