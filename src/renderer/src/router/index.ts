@@ -1,11 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
 const Welcome = () => import('../views/Welcome.vue')
+const Instructions = () => import('../views/Instructions.vue')
 const Tables = () => import('../views/Tables.vue')
 const TableDataMock = () => import('../views/TableDataMock.vue')
 const routes = [
   {
     path: '/',
-    redirect: '/welcome'
+    redirect: '/instructions'
+  },
+  {
+    path: '/instructions',
+    component: Instructions,
+    name: 'Instructions',
+    meta: {
+      title: '使用文档'
+    }
   },
   {
     path: '/welcome',

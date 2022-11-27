@@ -1,5 +1,5 @@
 <template>
-  <div class="system-bar">
+  <a-row class="system-bar">
     <div class="left">
       <a-button style="margin-left: 15px;">
         <template #icon>
@@ -28,10 +28,10 @@
           </template>
         </a-button>
       </a-tooltip>
-
     </div>
-    <div class="title">
-      数据库数据生成 | Baymax
+    <div class="title" style="text-align: center;">
+      <span>SqlMock</span> | <span style="font-size:13px;opacity:.6;">数据库数据填充</span><br/>
+      <span style="font-size:10px;opacity:.5;">Copyright © Baymax 版权所有</span>
     </div>
     <div class="right">
       <a-button @click="toMin()">
@@ -50,12 +50,13 @@
         </template>
       </a-button>
     </div>
-  </div>
+  </a-row>
 </template>
 <script lang="ts" setup>
-import { ipcRenderer, shell } from 'electron'
+import { ipcRenderer } from 'electron'
 import { ref } from 'vue';
 import IconFont from "./IconFont.vue";
+import { toLink } from '@renderer/utils/link';
 const isMax = ref(false)
 
 ipcRenderer.on('mainWindowCharge', (_event, arg) => {
@@ -83,9 +84,7 @@ const toggleMax = () => {
 const toClose = () => {
   ipcRenderer.send('close-app')
 }
-const toLink = (href) => {
-  shell.openExternal(href);
-}
+
 
 </script>
 <style lang="less" scoped>
@@ -107,7 +106,10 @@ const toLink = (href) => {
   }
 
   .title {
-    font-weight: bold;
+    span{
+      font-weight: bold;
+      color: var(--color-text-1);
+    }
   }
 
   .right {
