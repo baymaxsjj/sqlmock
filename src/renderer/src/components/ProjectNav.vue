@@ -113,9 +113,10 @@ const deleteProject = (project: Project): void => {
   Message.success('删除成功~')
 }
 const updateProject = (project: Project): void => {
+  Object.assign(form, project.connInfo)
   form.name = project.name
   form.id = project.id!
-  Object.assign(form, project.connInfo)
+  form.type=project.adpterUUID
   visible.value = true
 }
 //添加项目

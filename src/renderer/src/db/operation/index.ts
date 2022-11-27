@@ -1,4 +1,5 @@
 import MysqlAdapter from './adapter/mysql-adapter'
+import { SequelizeMysqlPlugin, SequelizeSqlitePlugin } from './adapter/sequelize-adapter'
 // import SequelizePlugin from "./adapter/SequelizeAdapter";
 import baseDbAdapter, { dbConnectInfo, dbPlugin } from './base-db'
 // 注册器
@@ -40,6 +41,8 @@ class dbMocke {
 }
 const dbmock = new dbMocke()
 dbmock.use(new MysqlAdapter())
+dbmock.use(new SequelizeMysqlPlugin())
+dbmock.use(new SequelizeSqlitePlugin())
 //还是单独适配吧！bug
 // dbmock.use(new SequelizePlugin())
 

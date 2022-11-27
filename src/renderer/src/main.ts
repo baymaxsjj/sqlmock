@@ -5,6 +5,7 @@ import ArcoVueIcon from '@arco-design/web-vue/es/icon'
 import ArcoVue from '@arco-design/web-vue'
 import './assets/css/reset.css'
 import '@arco-themes/vue-db-mock/index.less'
+import './samples/node-api'
 
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'

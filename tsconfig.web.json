@@ -5,10 +5,10 @@
     "src/renderer/src/**/*",
     "src/renderer/src/**/*.vue",
     "src/preload/*.d.ts"
-  ],
+, "src/renderer/icon-font"  ],
   "compilerOptions": {
     "composite": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@renderer/*": [
         "src/renderer/src/*"

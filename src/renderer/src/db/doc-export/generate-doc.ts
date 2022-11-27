@@ -2,8 +2,11 @@ import PizZip from 'pizzip'
 import DocxTemplater from 'docxtemplater'
 import { saveAs } from 'file-saver'
 import { TableDocData } from './doc-export'
+import { gatRootFilePath } from '@renderer/utils/file'
 export const exportWord = (save_name: string, template: string, data: any) => {
   const JSZipUtils = require('jszip-utils')
+  template=gatRootFilePath(template)
+  console.log(template)
   JSZipUtils.getBinaryContent(template, function (err: any, content: PizZip.LoadData) {
     if (err) {
       console.log(err)

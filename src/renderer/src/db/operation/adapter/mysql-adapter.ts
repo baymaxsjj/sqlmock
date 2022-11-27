@@ -13,7 +13,7 @@ interface MysqlTableAttributes {
   Type: string
 }
 
-class MysqlAdapter implements baseDbAdapter {
+export class MysqlAdapter implements baseDbAdapter {
   connectInfo: dbConnectInfo
   constructor(connectInfo: dbConnectInfo) {
     this.connectInfo = connectInfo
@@ -29,7 +29,7 @@ class MysqlAdapter implements baseDbAdapter {
     // if(this.connectPool){
     //     return this.connectPool
     // }
-    const mysql = require('mysql')
+    const mysql = require('mysql2')
     console.warn('创建连接池')
     const connectPool = mysql.createPool({
       host: this.connectInfo.host,
@@ -40,10 +40,9 @@ class MysqlAdapter implements baseDbAdapter {
       connectionLimit: 20, //"指定连接池中最大的链接数，默认是10",
       multipleStatements: true //"是否运行执行多条sql语句，默认值为false"
     })
-    // this.connectPool=connectPool
     return connectPool
   }
-  select<T, U>(sql: string, sqlParams: Array<unknown>, callback: (results: U) => T): Promise<T> {
+  select<T, U>(sql: string, sqlParams?: Array<unknown>, callback?: (results: U) => T): Promise<T> {
     console.log('执行参数', sqlParams)
     const promise = new Promise<T>((resolve, reject) => {
       this.connect().getConnection((err: any, connect: any) => {
@@ -55,14 +54,18 @@ class MysqlAdapter implements baseDbAdapter {
           if (error) reject(error)
           console.log(results)
           connect.release()
-          resolve(callback(results))
+          if(callback){
+            resolve(callback(results))
+          }else{
+            resolve(results as unknown as T)
+          }
         })
       })
     })
     return promise
   }
   testConn(): Promise<unknown> {
-    return this.getTables()
+    return this.select("SELECT 1+1 AS result")
   }
   async getTables(): Promise<Array<TableInfo>> {
     const sql = 'select table_name ,table_comment , create_time   from information_schema.tables where table_schema=?'

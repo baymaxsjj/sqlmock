@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, session } from 'electron'
+import { app, shell, BrowserWindow, session, ipcMain } from 'electron'
 import * as path from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { join } from 'path'
@@ -11,6 +11,7 @@ function createWindow(): void {
     width: 900,
     height: 670,
     show: false,
+    frame: false,  // 去掉默认的标题栏
     autoHideMenuBar: true,
     ...(process.platform === 'linux'
       ? {
@@ -42,6 +43,32 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
   }
+  mainWindow.on('maximize', () => {
+    mainWindow.webContents.send('mainWindowCharge', 'maximize')
+  })
+  
+  mainWindow.on('unmaximize', () => {
+    mainWindow.webContents.send('mainWindowCharge', 'unmaximize')
+  })
+  ipcMain.on('close-app', () => {
+    if (mainWindow) {
+      mainWindow.close()
+    }
+  })
+  ipcMain.on('min-app', () => {
+    mainWindow.minimize()
+  })
+  ipcMain.on('max-app', () => {
+    mainWindow.maximize()
+  })
+  ipcMain.on('unmax-app', () => {
+    mainWindow.unmaximize()
+  })
+  ipcMain.on('open-console', () => {
+    mainWindow.webContents.openDevTools();
+  })
+  
+ 
 }
 const reactDevToolsPath = join(
   homedir(),
