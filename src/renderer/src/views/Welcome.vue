@@ -15,13 +15,13 @@
   </ul>
 </template>
 <style lang="less" scoped>
-.welcome{
+.welcome {
   display: flex;
   align-items: center;
   justify-content: space-around;
   margin: auto;
   height: 100%;
-  .item{
+  .item {
     border: 2px solid rgba(var(--primary-6));
     border-radius: 5px;
     padding: 50px;

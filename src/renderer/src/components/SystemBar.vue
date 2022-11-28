@@ -1,14 +1,14 @@
 <template>
   <a-row class="system-bar">
     <div class="left">
-      <a-button style="margin-left: 15px;">
+      <a-button style="margin-left: 15px">
         <template #icon>
           <img src="../assets/icon.ico" height="30" />
         </template>
       </a-button>
 
       <a-tooltip content="Baymax Gitee" position="bottom">
-        <a-button @click="toLink('https://gitee.com/baymaxsjj/sqlmock')" style="margin:0 15px">
+        <a-button @click="toLink('https://gitee.com/baymaxsjj/sqlmock')" style="margin: 0 15px">
           <template #icon>
             <icon-font type="icon-gitee" :size="25"></icon-font>
           </template>
@@ -22,16 +22,16 @@
         </a-button>
       </a-tooltip>
       <a-tooltip content="控制台" position="bottom">
-        <a-button style="margin-left: 15px;" @click="openConsole">
+        <a-button style="margin-left: 15px" @click="openConsole">
           <template #icon>
             <icon-font type="icon-window" :size="25"></icon-font>
           </template>
         </a-button>
       </a-tooltip>
     </div>
-    <div class="title" style="text-align: center;">
-      <span>SqlMock</span> | <span style="font-size:13px;opacity:.6;">数据库数据填充</span><br/>
-      <span style="font-size:10px;opacity:.5;">Copyright © Baymax 版权所有</span>
+    <div class="title" style="text-align: center">
+      <span>SqlMock</span> | <span style="font-size: 13px; opacity: 0.6">数据库数据填充</span><br />
+      <span style="font-size: 10px; opacity: 0.5">Copyright © Baymax 版权所有</span>
     </div>
     <div class="right">
       <a-button @click="toMin()">
@@ -54,9 +54,9 @@
 </template>
 <script lang="ts" setup>
 import { ipcRenderer } from 'electron'
-import { ref } from 'vue';
-import IconFont from "./IconFont.vue";
-import { toLink } from '@renderer/utils/link';
+import { ref } from 'vue'
+import IconFont from './IconFont.vue'
+import { toLink } from '@renderer/utils/link'
 const isMax = ref(false)
 
 ipcRenderer.on('mainWindowCharge', (_event, arg) => {
@@ -65,7 +65,7 @@ ipcRenderer.on('mainWindowCharge', (_event, arg) => {
   } else {
     isMax.value = false
   }
-});
+})
 const openConsole = () => {
   ipcRenderer.send('open-console')
 }
@@ -84,8 +84,6 @@ const toggleMax = () => {
 const toClose = () => {
   ipcRenderer.send('close-app')
 }
-
-
 </script>
 <style lang="less" scoped>
 .system-bar {
@@ -106,7 +104,7 @@ const toClose = () => {
   }
 
   .title {
-    span{
+    span {
       font-weight: bold;
       color: var(--color-text-1);
     }

@@ -5,39 +5,45 @@
         </template>
         创建项目
       </a-button> -->
-  <a-menu class="project" mode="pop" show-collapse-button breakpoint="xl" v-model:collapsed="collapsed" >
+  <a-menu
+    class="project"
+    mode="pop"
+    show-collapse-button
+    breakpoint="xl"
+    v-model:collapsed="collapsed"
+  >
     <a-menu-item @click="create">
       <template #icon>
         <icon-plus />
       </template>
       创建项目
     </a-menu-item>
-      <template v-for="item of projects" :key="item.url">
-        <router-link :to="`/${item.id}/tables`">
-          <a-menu-item class="project-menu">
-            <template #icon>
-              <icon-code-sandbox :style="{ color: item.adapter ? 'cyan' : '' }" />
-            </template>
-            <div style="display: flex; align-items: center">
-              <span style="flex-grow: 1"> {{ item.name }}</span>
-              <a-dropdown trigger="hover">
-                <a-button shape="circle" v-show="!collapsed">
-                  <icon-more style="margin-right: 0" />
-                </a-button>
-                <template #content>
-                  <a-doption @click="closeDb(item)" v-show="item.adapter">关闭数据库</a-doption>
-                  <a-doption @click="updateProject(item)">修改项目</a-doption>
-                  <a-doption @click="updateProject(item)">导出项目</a-doption>
-                  <a-doption @click="deleteProject(item)">删除项目</a-doption>
-                </template>
-              </a-dropdown>
-            </div>
-          </a-menu-item>
-        </router-link>
-      </template>
-    <a-empty class="empty" v-if="projects.length==0&&!collapsed"/>
+    <template v-for="item of projects" :key="item.url">
+      <router-link :to="`/${item.id}/tables`">
+        <a-menu-item class="project-menu">
+          <template #icon>
+            <icon-code-sandbox :style="{ color: item.adapter ? 'cyan' : '' }" />
+          </template>
+          <div style="display: flex; align-items: center">
+            <span style="flex-grow: 1"> {{ item.name }}</span>
+            <a-dropdown trigger="hover">
+              <a-button shape="circle" v-show="!collapsed">
+                <icon-more style="margin-right: 0" />
+              </a-button>
+              <template #content>
+                <a-doption @click="closeDb(item)" v-show="item.adapter">关闭数据库</a-doption>
+                <a-doption @click="updateProject(item)">修改项目</a-doption>
+                <a-doption @click="updateProject(item)">导出项目</a-doption>
+                <a-doption @click="deleteProject(item)">删除项目</a-doption>
+              </template>
+            </a-dropdown>
+          </div>
+        </a-menu-item>
+      </router-link>
+    </template>
+    <a-empty class="empty" v-if="projects.length == 0 && !collapsed" />
   </a-menu>
-  <a-modal v-model:visible="visible" @ok="addProject" >
+  <a-modal v-model:visible="visible" @ok="addProject">
     <template #title> 创建项目 </template>
     <a-form :model="form">
       <a-form-item field="name" label="项目名称">
@@ -78,7 +84,7 @@ import { reactive, ref } from 'vue'
 import baseDbAdapter, { dbConnectInfo } from '../db/operation/base-db'
 import dbMocke from '../db/operation/index'
 import useProjectStore, { Project } from '../stores/project'
-const collapsed=ref(false)
+const collapsed = ref(false)
 let dbAdapter: baseDbAdapter
 const form = reactive({
   id: '',
@@ -93,7 +99,7 @@ const form = reactive({
 const dbTypeList = dbMocke.getAdapterType()
 console.log(dbTypeList)
 const visible = ref(false)
-const dbChange = (): void => { }
+const dbChange = (): void => {}
 const projectStore = useProjectStore()
 const projects = projectStore.getProjects
 const create = (): void => {
@@ -116,7 +122,7 @@ const updateProject = (project: Project): void => {
   Object.assign(form, project.connInfo)
   form.name = project.name
   form.id = project.id!
-  form.type=project.adpterUUID
+  form.type = project.adpterUUID
   visible.value = true
 }
 //添加项目
@@ -172,7 +178,8 @@ const testConn = (): void => {
 }
 
 .arco-menu-collapsed {
-  .menu-more ,.empty{
+  .menu-more,
+  .empty {
     display: none !important;
   }
 }

@@ -20,12 +20,11 @@ interface TableAttributes {
   Mock: string
 }
 interface TableInfo {
-  table_name:string,
-  table_comment:string,
-  create_time:string
+  table_name: string
+  table_comment: string
+  create_time: string
 }
-
 
 export default TableInfo
 export { TableKey }
-export type { TableInfo, TableAttributes, }
+export type { TableInfo, TableAttributes }

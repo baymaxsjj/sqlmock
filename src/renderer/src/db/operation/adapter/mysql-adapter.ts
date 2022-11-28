@@ -54,9 +54,9 @@ export class MysqlAdapter implements baseDbAdapter {
           if (error) reject(error)
           console.log(results)
           connect.release()
-          if(callback){
+          if (callback) {
             resolve(callback(results))
-          }else{
+          } else {
             resolve(results as unknown as T)
           }
         })
@@ -65,10 +65,11 @@ export class MysqlAdapter implements baseDbAdapter {
     return promise
   }
   testConn(): Promise<unknown> {
-    return this.select("SELECT 1+1 AS result")
+    return this.select('SELECT 1+1 AS result')
   }
   async getTables(): Promise<Array<TableInfo>> {
-    const sql = 'select table_name ,table_comment , create_time   from information_schema.tables where table_schema=?'
+    const sql =
+      'select table_name ,table_comment , create_time   from information_schema.tables where table_schema=?'
     const prom = await this.select<Array<TableInfo>, Array<TableInfo>>(
       sql,
       [this.connectInfo.database],

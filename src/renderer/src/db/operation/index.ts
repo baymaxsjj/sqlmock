@@ -18,7 +18,7 @@ class dbMocke {
     }
   }
   getAdapterType(): object {
-    const allType: Record<string,unknown> = {}
+    const allType: Record<string, unknown> = {}
     this.dbAdapters.forEach((value: dbPlugin) => {
       allType[value.uuid] = value.name
     })

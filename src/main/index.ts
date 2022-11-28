@@ -11,7 +11,7 @@ function createWindow(): void {
     width: 900,
     height: 670,
     show: false,
-    frame: false,  // 去掉默认的标题栏
+    frame: false, // 去掉默认的标题栏
     autoHideMenuBar: true,
     ...(process.platform === 'linux'
       ? {
@@ -46,7 +46,7 @@ function createWindow(): void {
   mainWindow.on('maximize', () => {
     mainWindow.webContents.send('mainWindowCharge', 'maximize')
   })
-  
+
   mainWindow.on('unmaximize', () => {
     mainWindow.webContents.send('mainWindowCharge', 'unmaximize')
   })
@@ -65,10 +65,8 @@ function createWindow(): void {
     mainWindow.unmaximize()
   })
   ipcMain.on('open-console', () => {
-    mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools()
   })
-  
- 
 }
 const reactDevToolsPath = join(
   homedir(),

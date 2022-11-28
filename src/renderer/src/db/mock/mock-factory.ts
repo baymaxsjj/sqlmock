@@ -1,5 +1,5 @@
 import useProjectStore, { ProjectTable } from '../../stores/project'
-const Mock = require('mockjs')
+import Mock from 'mockjs'
 class MockFactory {
   projectTable: ProjectTable
   private successCallback: Function | undefined
@@ -12,12 +12,12 @@ class MockFactory {
     // const mockData = Mock.mock(tableRule);
     // console.log('mockData',mockData)
     const mockStr = JSON.stringify(tableRule)
-    const funcStr = mockStr.replaceAll(/{{(.*?)}}/g , '"+$1+"')
+    const funcStr = mockStr.replaceAll(/{{(.*?)}}/g, '"+$1+"')
     return funcStr
   }
   getMock(): Object {
     const tableAttrs = this.projectTable.content
-    const mockObj: Record<string,unknown> = {}
+    const mockObj: Record<string, unknown> = {}
     for (let i = 0, len = tableAttrs.length; i < len; i++) {
       const row = tableAttrs[i]
       if (!row.Hidden) {

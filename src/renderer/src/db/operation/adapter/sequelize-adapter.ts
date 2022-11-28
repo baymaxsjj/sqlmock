@@ -1,6 +1,6 @@
 import baseDbAdapter, { dbConnectInfo, dbPlugin } from '../base-db'
 import { MysqlAdapter } from './mysql-adapter'
-const { Sequelize, QueryTypes } =require('sequelize')
+const { Sequelize, QueryTypes } = require('sequelize')
 class SequelizeAdapter extends MysqlAdapter {
   connectInfo: dbConnectInfo
   queryTypes = QueryTypes.SELECT
@@ -18,7 +18,7 @@ class SequelizeAdapter extends MysqlAdapter {
         break
       default:
       case 'mysql':
-        type='mysql'
+        type = 'mysql'
     }
     const sequelize = new Sequelize(
       this.connectInfo.database,

@@ -4,7 +4,7 @@
   "description": "通过Mock.js和自定义脚本生成数据库数据，支持导出Work和Markdown文档",
   "main": "./out/main/index.js",
   "author": "Baymax",
-  "homepage":".",
+  "homepage": ".",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts,.vue --fix",
@@ -22,9 +22,9 @@
   "dependencies": {
     "@electron-toolkit/preload": "^1.0.2",
     "@electron-toolkit/utils": "^1.0.2",
+    "@types/mockjs": "^1.0.7",
     "dayjs": "^1.11.6",
     "docxtemplater": "^3.32.4",
-    "file-save": "^0.2.0",
     "file-saver": "^2.0.5",
     "jszip-utils": "^0.1.0",
     "mysql2": "^2.3.3",
