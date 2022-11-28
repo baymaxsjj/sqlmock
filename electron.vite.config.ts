@@ -11,6 +11,9 @@ export default defineConfig({
   },
   renderer: {
     publicDir: 'public',
+    define: {
+      APP_VERSION: JSON.stringify(process.env.npm_package_version)
+    },
     resolve: {
       alias: {
         '@renderer': resolve('src/renderer/src')

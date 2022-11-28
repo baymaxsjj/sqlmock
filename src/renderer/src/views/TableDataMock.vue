@@ -68,9 +68,6 @@
       :data="tableAttr.content"
       :loading="loading"
       :pagination="false"
-      :scroll="scrollPercent"
-      :scrollbar="true"
-      column-resizable
     >
       <template #Remove="{ record }">
         <a-button
@@ -122,7 +119,11 @@
       />
     </a-modal>
     <a-modal v-model:visible="resultVisible" title="模拟结果" fullscreen>
-      <a-table :data="mockResult" :columns="getTableColumn"> </a-table>
+      <a-table :data="mockResult" :columns="getTableColumn">
+        <template #mockResult="{record}">
+            <a-tag color="magenta">{{record.mockResult}}</a-tag>
+        </template>
+      </a-table>
     </a-modal>
   </div>
 </template>
@@ -185,7 +186,8 @@ const getTableColumn = computed(() => {
   })
   columns.push({
     title: '结果',
-    dataIndex: 'mockresult'
+    dataIndex: 'mockResult',
+    slotName: 'mockResult',
   })
   return columns
 })
@@ -218,9 +220,9 @@ const runMock = (isTest = false): void => {
       }
       mockData.forEach((value) => {
         if (errInfo) {
-          value['mockresult'] = errInfo
+          value['mockResult'] = errInfo
         } else {
-          value['mockresult'] = '成功'
+          value['mockResult'] = '成功'
         }
       })
       mockResult.value = [...mockResult.value, ...mockData]
@@ -264,10 +266,6 @@ const saveProTab = (): void => {
   project.value.tableMock[tableName.value] = tableAttr
   projectStore.updatedProjectById(project.value)
   Message.success('保存成功')
-}
-const scrollPercent = {
-  y: '100%',
-  x: '100%'
 }
 const columns: Array<TableColumnData> = [
   {
@@ -366,19 +364,13 @@ watch([() => route.params.table, () => route.params.projectId], ([tName, pId]) =
 </script>
 <style lang="less" scoped>
 .data-mock {
-  display: flex;
-  flex-direction: column;
   height: 100%;
-  padding: 10px;
-
+  box-sizing: border-box;
   .operate {
     display: flex;
     justify-content: end;
     align-items: center;
   }
 
-  .data-table {
-    flex-grow: 1;
-  }
 }
 </style>

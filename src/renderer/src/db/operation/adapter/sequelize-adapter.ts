@@ -11,7 +11,7 @@ class SequelizeAdapter extends MysqlAdapter {
   declare updated?: (<T>(sql: string, sqlParams: unknown[]) => Promise<T>) | undefined
   declare delete?: (<T>(sql: string, sqlParams: unknown[]) => Promise<T>) | undefined
   connect(): any {
-    let type
+    let type: string
     switch (this.connectInfo.type) {
       case 'sqlit':
         type = 'sqlit'

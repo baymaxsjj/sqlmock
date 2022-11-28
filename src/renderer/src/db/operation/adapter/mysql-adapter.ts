@@ -20,15 +20,13 @@ export class MysqlAdapter implements baseDbAdapter {
     console.warn('请勿频繁创建适配器')
   }
   close(): unknown {
+    this.connect().end()
     return
   }
   connectPool: unknown
   updated?: (<T>(sql: string, sqlParams: unknown[]) => Promise<T>) | undefined
   delete?: (<T>(sql: string, sqlParams: unknown[]) => Promise<T>) | undefined
   connect(): any {
-    // if(this.connectPool){
-    //     return this.connectPool
-    // }
     const mysql = require('mysql2')
     console.warn('创建连接池')
     const connectPool = mysql.createPool({
@@ -45,21 +43,14 @@ export class MysqlAdapter implements baseDbAdapter {
   select<T, U>(sql: string, sqlParams?: Array<unknown>, callback?: (results: U) => T): Promise<T> {
     console.log('执行参数', sqlParams)
     const promise = new Promise<T>((resolve, reject) => {
-      this.connect().getConnection((err: any, connect: any) => {
-        if (err) {
-          console.log(`数据库连接失败:${err.message}`)
-          reject(err)
+      this.connect().query(sql, sqlParams, function (error: unknown, results: U) {
+        if (error) reject(error)
+        console.log(results)
+        if (callback) {
+          resolve(callback(results))
+        } else {
+          resolve(results as unknown as T)
         }
-        connect.query(sql, sqlParams, function (error: unknown, results: U) {
-          if (error) reject(error)
-          console.log(results)
-          connect.release()
-          if (callback) {
-            resolve(callback(results))
-          } else {
-            resolve(results as unknown as T)
-          }
-        })
       })
     })
     return promise

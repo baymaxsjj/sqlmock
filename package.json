@@ -1,6 +1,6 @@
 {
   "name": "sql-mock",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "通过Mock.js和自定义脚本生成数据库数据，支持导出Work和Markdown文档",
   "main": "./out/main/index.js",
   "author": "Baymax",

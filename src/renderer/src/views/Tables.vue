@@ -27,13 +27,10 @@
         </a-dropdown>
       </template>
     </a-page-header>
-
-    <a-table
+      <a-table
       v-model:selectedKeys="selectedKeys"
       :loading="loading"
       row-key="table_name"
-      :scroll="{ y: '100%' }"
-      :scrollbar="true"
       :pagination="false"
       :row-selection="rowSelection"
       :columns="columns"
@@ -185,10 +182,8 @@ watch(
 </script>
 <style lang="less" scoped>
 .tables {
-  height: 100%;
   width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
+  position: relative;
   .page-header {
     button {
       margin: 0 10px;

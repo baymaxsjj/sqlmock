@@ -11,11 +11,14 @@
 > 代码写的烂，采用 CV 大法，百度拼凑而成，水平有限~~~
 >
 > 版权说明：未经本人允许禁止用于任何商业用途。仅限个人学习使用
+### 下载
+> 注意此下载方式，不一定是最新版本，可能存在些bug。如需使用最新版本，可以克隆本项目后自行打包。
+[SqlMock releases](https://gitee.com/baymaxsjj/sqlmock/releases)
 
 ### 系统
 
 - 框架：Vue、Vite、Mock、Electron
-- 数据库：Mysql2、Sequelize 框架
+- 数据库插件：Mysql2、Sequelize 框架
 - 文档模板：docxtemplater
 - 等等第三方插件
 

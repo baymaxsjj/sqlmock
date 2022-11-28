@@ -25,7 +25,7 @@
             <icon-code-sandbox :style="{ color: item.adapter ? 'cyan' : '' }" />
           </template>
           <div style="display: flex; align-items: center">
-            <span style="flex-grow: 1"> {{ item.name }}</span>
+            <span style="flex-grow: 1;text-overflow: ellipsis;overflow: hidden;"> {{ item.name }}</span>
             <a-dropdown trigger="hover">
               <a-button shape="circle" v-show="!collapsed">
                 <icon-more style="margin-right: 0" />
@@ -81,9 +81,14 @@
 <script lang="ts" setup>
 import { Message, Notification } from '@arco-design/web-vue'
 import { reactive, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import baseDbAdapter, { dbConnectInfo } from '../db/operation/base-db'
 import dbMocke from '../db/operation/index'
 import useProjectStore, { Project } from '../stores/project'
+  
+const route=useRoute()
+const router=useRouter()
+
 const collapsed = ref(false)
 let dbAdapter: baseDbAdapter
 const form = reactive({
@@ -112,11 +117,20 @@ const closeDb = (project: Project): void => {
     project.adapter.close()
     project.adapter = undefined
     Message.success('关闭成功~')
+    isToHome(project.id!)
   }
 }
 const deleteProject = (project: Project): void => {
   projectStore.delProjectById(project.id!)
   Message.success('删除成功~')
+  isToHome(project.id!)
+}
+const isToHome=(projectId:string)=>{
+  const id=route.params['projectId']
+  if(id==projectId){
+    router.push('/')
+  }
+
 }
 const updateProject = (project: Project): void => {
   Object.assign(form, project.connInfo)
@@ -175,6 +189,7 @@ const testConn = (): void => {
   overflow-y: auto;
   max-width: 250px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  user-select:none;
 }
 
 .arco-menu-collapsed {

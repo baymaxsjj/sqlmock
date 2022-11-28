@@ -112,6 +112,5 @@ import IconFont from '../components/IconFont.vue'
   padding: 20px;
   height: 100%;
   box-sizing: border-box;
-  overflow-y: auto;
 }
 </style>

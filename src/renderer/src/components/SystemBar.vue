@@ -1,14 +1,14 @@
 <template>
   <a-row class="system-bar">
     <div class="left">
-      <a-button style="margin-left: 15px">
+      <a-button>
         <template #icon>
           <img src="../assets/icon.ico" height="30" />
         </template>
       </a-button>
 
       <a-tooltip content="Baymax Gitee" position="bottom">
-        <a-button @click="toLink('https://gitee.com/baymaxsjj/sqlmock')" style="margin: 0 15px">
+        <a-button @click="toLink('https://gitee.com/baymaxsjj/sqlmock')">
           <template #icon>
             <icon-font type="icon-gitee" :size="25"></icon-font>
           </template>
@@ -22,16 +22,16 @@
         </a-button>
       </a-tooltip>
       <a-tooltip content="控制台" position="bottom">
-        <a-button style="margin-left: 15px" @click="openConsole">
+        <a-button @click="openConsole">
           <template #icon>
             <icon-font type="icon-window" :size="25"></icon-font>
           </template>
         </a-button>
       </a-tooltip>
     </div>
-    <div class="title" style="text-align: center">
+    <div class="title" style="text-align: center" @click="toLink('https://gitee.com/baymaxsjj')">
       <span>SqlMock</span> | <span style="font-size: 13px; opacity: 0.6">数据库数据填充</span><br />
-      <span style="font-size: 10px; opacity: 0.5">Copyright © Baymax 版权所有</span>
+      <span style="font-size: 10px; opacity: 0.5">Copyright © Baymax</span>
     </div>
     <div class="right">
       <a-button @click="toMin()">
@@ -100,10 +100,18 @@ const toClose = () => {
   -webkit-app-region: drag;
 
   .left {
-    -webkit-app-region: none;
+    display: flex;
+    align-items: center;
+    width: 250px;
+    button {
+      margin: 0 10px;
+      -webkit-app-region: none;
+    }
   }
 
   .title {
+    -webkit-app-region: none;
+    user-select:none;
     span {
       font-weight: bold;
       color: var(--color-text-1);
@@ -112,12 +120,13 @@ const toClose = () => {
 
   .right {
     height: 100%;
-    float: right;
-    -webkit-app-region: none;
-
+    width: 250px;
+    display: flex;
+    justify-content: end;
     button {
       height: 100%;
       width: 40px;
+      -webkit-app-region: none;
     }
 
     .close {

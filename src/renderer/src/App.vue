@@ -19,11 +19,24 @@ import ProjectNavVue from './components/ProjectNav.vue'
 .arco-page-header-wrapper {
   padding: 0 !important;
 }
+.arco-page-header-main{
+  max-width: 250px;
+}
+.arco-page-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #fff;
+  user-select:none;
+}
 
 body,
 html {
   height: 100vh;
   overflow: hidden;
+}
+#app{
+  height: 100%;
 }
 
 .arco-modal-container {
@@ -33,15 +46,15 @@ html {
 .main {
   display: flex;
   height: 100%;
-  height: 100vh;
   box-sizing: border-box;
   padding-top: 40px !important;
-  box-sizing: border-box;
 
   .router-view {
     flex: 1;
     height: 100%;
-    padding: 0 5px;
+    overflow: auto;
+    padding: 0 20px;
+    box-sizing: border-box;
   }
 }
 </style>
