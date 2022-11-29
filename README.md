@@ -1,6 +1,7 @@
 # SqlMock 数据库数据填充
 
-<img height="300" style="margin:0 auto" src="./src/renderer/public/image/doc/b89eea4d2c7845ccb9a85866bb1e9521.png"/>
+![image-20221127195055640](./src/renderer/public/image/doc/b89eea4d2c7845ccb9a85866bb1e9521.png)
+
 > 编写该工具的原因，是因为毕设的项目，数据太少，需要数据填充，顺便也生成下毕设逻辑设计中表的结构
 >
 > 其他工具，要么就是要写代码，要么就是数据太死板，于是就想结合下 Mock.js 生成数据.
