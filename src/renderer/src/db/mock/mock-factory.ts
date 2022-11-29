@@ -108,4 +108,35 @@ class MockFactory {
     }
   }
 }
+const mockCustomfield={
+  'name':['name','author','moniker'],
+  'image':['image','img','picture','pic'],
+  'url':['url','link','src','href'],
+  'now':['now','create','update','delete'],
+  'title':['title','subtitle','info'],
+  'paragraph':['paragraph','text','content'],
+}
+
+export const  generateMock=(field:string,type:string)=>{
+  let reg: RegExp
+  //处理特殊字段
+  for (const key in mockCustomfield) {
+    for(const ru of mockCustomfield[key]){
+      reg=new RegExp(ru,'i')
+      if(reg.test(field)){
+        return "@"+key;
+      }
+    }
+  }
+  type=type.replace('varchar','title')
+  type=type.replace('timestamp','datetime')
+  let rule=field+type;
+  for (const value of Object.keys(Mock.Random)) {
+    reg=new RegExp(value,'i')
+    if(reg.test(rule)){
+      return "@"+value
+    }
+  }
+  return "@"
+}
 export default MockFactory

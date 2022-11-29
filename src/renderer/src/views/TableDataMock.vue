@@ -37,9 +37,13 @@
             />
           </a-tooltip>
           <a-button-group>
+            <a-button size="large" status="danger" @click="geneMock"
+              >一键Mock<template #icon>
+                <icon-translate /> </template
+            ></a-button>
             <a-button size="large" status="danger" @click="editVisible = true"
               >脚本<template #icon>
-                <icon-code /> </template
+                <icon-code-block /></template
             ></a-button>
             <a-button size="large" status="warning" @click="runMock(true)"
               >测试<template #icon>
@@ -135,7 +139,7 @@ import { javascript } from '@codemirror/lang-javascript'
 import { Message, TableColumnData, TableData, Notification } from '@arco-design/web-vue'
 import { reactive, ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import MockFactory from '../db/mock/mock-factory'
+import MockFactory, { generateMock } from '../db/mock/mock-factory'
 import baseDbAdapter from '../db/operation/base-db'
 import { TableAttributes } from '../db/operation/table-type'
 import useProjectStore, { ProjectTable } from '../stores/project'
@@ -243,6 +247,14 @@ const getIsRemove = (record: TableAttributes): boolean => {
     return false
   }
   return true
+}
+const geneMock=()=>{
+  tableAttr?.content?.forEach((value) => {
+    value.Mock=value.Mock??""
+    if (!value.Hidden&&value.Mock=="") {
+      value.Mock=generateMock(value.Field,value.Type)
+    }
+  })
 }
 // 合并字段
 const mergeFields = (): void => {

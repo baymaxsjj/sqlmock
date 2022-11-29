@@ -5,13 +5,7 @@
         </template>
         创建项目
       </a-button> -->
-  <a-menu
-    class="project"
-    mode="pop"
-    show-collapse-button
-    breakpoint="xl"
-    v-model:collapsed="collapsed"
-  >
+  <a-menu class="project" mode="pop" show-collapse-button breakpoint="xl" v-model:collapsed="collapsed">
     <a-menu-item @click="create">
       <template #icon>
         <icon-plus />
@@ -43,39 +37,39 @@
     </template>
     <a-empty class="empty" v-if="projects.length == 0 && !collapsed" />
   </a-menu>
-  <a-modal v-model:visible="visible" @ok="addProject">
+  <a-modal v-model:visible="visible" :footer="false">
     <template #title> 创建项目 </template>
-    <a-form :model="form">
-      <a-form-item field="name" label="项目名称">
+    <a-form :model="form" @submit-success="addProject">
+      <a-form-item field="name" label="项目名称" :rules="formRules">
         <a-input v-model="form.name" placeholder="输入项目名称" />
       </a-form-item>
       <a-divider />
-      <a-form-item field="name" label="选择数据库">
+      <a-form-item field="type" label="数据库类型" :rules="formRules">
         <a-select v-model="form.type" placeholder="选择数据库类型" @input-value-change="dbChange">
           <a-option v-for="(item, key) of dbTypeList" :value="key" :label="item" />
         </a-select>
       </a-form-item>
-      <a-form-item field="name" label="主机地址">
+      <a-form-item field="host" label="主机地址" :rules="formRules">
         <a-input v-model="form.host" placeholder="输入主机地址" />
       </a-form-item>
-      <a-form-item field="name" label="端口">
+      <a-form-item field="port" label="端口" :rules="formRules">
         <a-input-number v-model="form.port" placeholder="输入主机端口" />
       </a-form-item>
-      <a-form-item field="name" label="用户名">
+      <a-form-item field="username" label="用户名" :rules="formRules">
         <a-input v-model="form.username" placeholder="输入用户名" />
       </a-form-item>
       <a-form-item field="name" label="密码">
-        <a-input v-model="form.password" placeholder="输入密码" />
+        <a-input-password v-model="form.password" placeholder="输入密码" />
       </a-form-item>
-      <a-form-item field="name" label="数据库">
+      <a-form-item field="database" label="数据库" :rules="formRules">
         <a-input v-model="form.database" placeholder="输入连接的数据库名" />
       </a-form-item>
+      <div style="display: flex;justify-content: end;">
+          <a-button  :disabled="form.type == ''" @click="testConn">测试连接</a-button>
+          <a-button  @click="visible = !visible" style="margin: 0 10px;">取消</a-button>
+          <a-button html-type="submit"  type="primary">添加项目</a-button>
+      </div>
     </a-form>
-    <template #footer>
-      <a-button :disabled="form.type == ''" @click="testConn">测试连接</a-button>
-      <a-button @click="visible = !visible">取消</a-button>
-      <a-button type="primary" :disabled="form.type == ''" @click="addProject">添加项目</a-button>
-    </template>
   </a-modal>
 </template>
 <script lang="ts" setup>
@@ -85,9 +79,9 @@ import { useRoute, useRouter } from 'vue-router'
 import baseDbAdapter, { dbConnectInfo } from '../db/operation/base-db'
 import dbMocke from '../db/operation/index'
 import useProjectStore, { Project } from '../stores/project'
-  
-const route=useRoute()
-const router=useRouter()
+
+const route = useRoute()
+const router = useRouter()
 
 const collapsed = ref(false)
 let dbAdapter: baseDbAdapter
@@ -98,15 +92,16 @@ const form = reactive({
   host: 'localhost',
   port: 3306,
   username: 'root',
-  password: '123456',
-  database: 'blog'
+  password: '',
+  database: ''
 })
 const dbTypeList = dbMocke.getAdapterType()
 console.log(dbTypeList)
 const visible = ref(false)
-const dbChange = (): void => {}
+const dbChange = (): void => { }
 const projectStore = useProjectStore()
 const projects = projectStore.getProjects
+const formRules = [{ required: true, message: '必填项' }]
 const create = (): void => {
   form.id = ''
   visible.value = true
@@ -125,9 +120,9 @@ const deleteProject = (project: Project): void => {
   Message.success('删除成功~')
   isToHome(project.id!)
 }
-const isToHome=(projectId:string)=>{
-  const id=route.params['projectId']
-  if(id==projectId){
+const isToHome = (projectId: string) => {
+  const id = route.params['projectId']
+  if (id == projectId) {
     router.push('/')
   }
 
@@ -189,10 +184,11 @@ const testConn = (): void => {
   overflow-y: auto;
   max-width: 250px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  user-select:none;
+  user-select: none;
 }
 
 .arco-menu-collapsed {
+
   .menu-more,
   .empty {
     display: none !important;
