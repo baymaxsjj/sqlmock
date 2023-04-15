@@ -1,5 +1,6 @@
 <template>
   <div class="tables">
+    <div id="canvas"></div>
     <a-page-header
       :title="project.name"
       subtitle="数据表"
@@ -131,9 +132,14 @@ const exportDoc = (type: DocExportType) => {
     Message.info('未选择导出表')
     return
   }
+  const msg=Message.loading({
+      content:"文档导出中……"
+  })
   getTableDocData().then((res) => {
     let exportDoc = new DocExport()
-    exportDoc.download(type, project.value.name, res)
+    exportDoc.download(type, project.value.name, res).then(()=>{
+      msg.close()
+    })
   })
 }
 const getTableDocData = async (): Promise<Array<TableDocData>> => {

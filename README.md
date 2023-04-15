@@ -1,22 +1,20 @@
 # SqlMock 数据库数据填充
 
-![image-20221127195055640](./src/renderer/public/image/doc/b89eea4d2c7845ccb9a85866bb1e9521.png)
-
-> 编写该工具的原因，是因为毕设的项目，数据太少，需要数据填充，顺便也生成下毕设逻辑设计中表的结构
+> 编写该工具的原因，是因为毕设的项目，数据太少，需要数据填充，顺便也生成下毕设逻辑设计中表的结构和表ER图，其他工具，要么就是要写代码，要么就是数据太死板，于是就想结合下 Mock.js 生成数据，
 >
-> 其他工具，要么就是要写代码，要么就是数据太死板，于是就想结合下 Mock.js 生成数据.
-
-如果你觉得该工具好用的话~欢迎给个 star。
-[Baymax Gitee](https://gitee.com/baymaxsjj/sqlmock)
-[Baymax Github](https://github.com/baymaxsjj/sqlmock)
-
 > 代码写的烂，采用 CV 大法，百度拼凑而成，水平有限~~~
 >
 > 版权说明：未经本人允许禁止用于任何商业用途。仅限个人学习使用
+
+如果你觉得该工具好用的话~欢迎给个 star。
+gitee:[https://gitee.com/baymaxsjj/sqlmock](https://gitee.com/baymaxsjj/sqlmock)
+github:[https://github.com/baymaxsjj/sqlmock](https://github.com/baymaxsjj/sqlmock)
+
 ### 下载
 > 注意此下载方式，不一定是最新版本，可能存在些bug。如需使用最新版本，可以克隆本项目后自行打包。
-[Gitee releases](https://gitee.com/baymaxsjj/sqlmock/releases)
-[Github releases](https://github.com/baymaxsjj/sqlmock/releases)
+
+gitee下载: [https://gitee.com/baymaxsjj/sqlmock/releases](https://gitee.com/baymaxsjj/sqlmock/releases)
+github下载： [https://github.com/baymaxsjj/sqlmock/releases](https://github.com/baymaxsjj/sqlmock/releases)
 
 ### 系统
 
@@ -35,7 +33,7 @@
 - [x] 数据填充，支持批量、单次插入（防止批量插入异常，导致插入失败、）
 - [x] 自定义表字段填充数据
 - [x] 支持测试数据
-- [x] 表结构导出，支持 Word、Markdown 格式
+- [x] 表结构导出，支持 Word、Markdown 格式、表ER图。
 - [x] 支持一键简单生成mock.js占位符
 
 ### 测试
@@ -88,6 +86,10 @@ Mysql 5.Xx
 ##### Markdown
 
 ![image-20221127200502866](./src/renderer/public/image/doc/image-20221127200502866.png)
+
+## 表ER图
+![image-20221127200502866](./src/renderer/public/image/doc/ee_exam_question-ER%E5%9B%BE.png)
+
 
 ### Instal
 

@@ -370,6 +370,8 @@ watch([() => route.params.table, () => route.params.projectId], ([tName, pId]) =
   if (route.name != 'TableDataMock' || (tName == tableName.value && projectId.value == pId)) {
     return
   }
+  tableName.value=tName;
+  projectId.value=pId;
   getDbAdapter()
   initData()
 })

@@ -3,7 +3,7 @@ import DocxTemplater from 'docxtemplater'
 import { saveAs } from 'file-saver'
 import { TableDocData } from './doc-export'
 import { gatRootFilePath } from '@renderer/utils/file'
-export const exportWord = (save_name: string, template: string, data: any) => {
+export const exportWord = async (save_name: string, template: string, data: any) => {
   const JSZipUtils = require('jszip-utils')
   template = gatRootFilePath(template)
   console.log(template)
@@ -32,7 +32,7 @@ export const exportWord = (save_name: string, template: string, data: any) => {
     saveAs(out, `${save_name}-数据库字段.docx`)
   })
 }
-export const exportMarkdown = (save_name: string, data: Array<TableDocData>) => {
+export const exportMarkdown = async (save_name: string, data: Array<TableDocData>) => {
   let text = ''
   data.forEach((row) => {
     text += `\n${row.table_info.table_name}(${row.table_info.table_comment})\n`

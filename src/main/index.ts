@@ -72,7 +72,7 @@ function createWindow(): void {
 
 const reactDevToolsPath = join(
   homedir(),
-  'AppData/Local/Microsoft/Edge/User Data/Default/Extensions/olofadcdnkkjdfgjcmjaadnlehnnihnl/6.4.5_0'
+  'AppData/Local/Microsoft/Edge/User Data/Default/Extensions/olofadcdnkkjdfgjcmjaadnlehnnihnl/6.5.0_0'
 )
 if (!gotTheLock) {
   app.quit()
