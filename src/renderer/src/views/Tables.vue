@@ -28,7 +28,7 @@
         </a-dropdown>
       </template>
     </a-page-header>
-      <a-table
+    <a-table
       v-model:selectedKeys="selectedKeys"
       :loading="loading"
       row-key="table_name"
@@ -132,12 +132,13 @@ const exportDoc = (type: DocExportType) => {
     Message.info('未选择导出表')
     return
   }
-  const msg=Message.loading({
-      content:"文档导出中……"
+  const msg = Message.loading({
+    content: '文档导出中……',
+    duration: -1
   })
   getTableDocData().then((res) => {
     let exportDoc = new DocExport()
-    exportDoc.download(type, project.value.name, res).then(()=>{
+    exportDoc.download(type, project.value.name, res).then(() => {
       msg.close()
     })
   })

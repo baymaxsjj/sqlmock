@@ -1,14 +1,6 @@
 import { TableDocData } from './doc-export'
-import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
-import {changeDpiDataUrl} from 'changedpi'
-const dpr = window.devicePixelRatio
-const shapeWidth = 240*dpr
-const shapeHeight = 140*dpr
-const fontSize=35*dpr
-const lineColor = 'black'
-const bgColor = 'white'
-const lineWidth = 2*dpr
+
 interface erElement {
   text: string
   shape: 'rectangle' | 'oval'
@@ -17,9 +9,16 @@ interface erElement {
   x: number
   y: number
 }
+let shapeWidth = 240 
+let shapeHeight = 140
+let lineWidth = 2 
+let fontSize = 35
+
+const lineColor = 'black'
+const bgColor = 'white'
 
 function drawEllipse(
-  ctx: CanvasRenderingContext2D,
+  ctx: OffscreenCanvasRenderingContext2D,
   x: number,
   y: number,
   width: number,
@@ -32,12 +31,9 @@ function drawEllipse(
   ctx.fill()
   ctx.stroke()
 }
-const getMinCanvas = (
-  canvas: HTMLCanvasElement,
-  context: CanvasRenderingContext2D
-): HTMLCanvasElement => {
-  let imgData = context.getImageData(0, 0, canvas.width, canvas.height)
-  const data = imgData.data
+const getMinCanvas = (canvas: OffscreenCanvas): OffscreenCanvas => {
+  let context = canvas.getContext('2d')! as OffscreenCanvasRenderingContext2D
+  const data = context.getImageData(0, 0, canvas.width, canvas.height).data
   let left = canvas.width
   let right = 0
   let top = canvas.height
@@ -55,10 +51,8 @@ const getMinCanvas = (
   }
   const width = right - left
   const height = bottom - top
-  const canvas1 = document.createElement('canvas')
-  canvas1.width = width
-  canvas1.height = height
-  context = canvas1.getContext('2d')!
+  const canvas1 = new OffscreenCanvas(width, height)
+  context = canvas1.getContext('2d')! as OffscreenCanvasRenderingContext2D
   context.beginPath()
   context.fillStyle = bgColor
   context.fillRect(0, 0, canvas.width, canvas.height)
@@ -67,7 +61,7 @@ const getMinCanvas = (
   return canvas1
 }
 
-const drawText = (ctx: CanvasRenderingContext2D, text: string, x: number, y: number) => {
+const drawText = (ctx: OffscreenCanvasRenderingContext2D, text: string, x: number, y: number) => {
   ctx.beginPath()
   ctx.font = `normal 600 ${fontSize}px Arial, sans-serif`
   const textWidth = ctx.measureText(text).width
@@ -79,13 +73,13 @@ const drawText = (ctx: CanvasRenderingContext2D, text: string, x: number, y: num
   ctx.fillText(text, textX, textY, shapeWidth)
   ctx.stroke()
 }
-const getTabelEr = (canvas:HTMLCanvasElement,table: TableDocData) => {
+const getTabelEr = (table: TableDocData) => {
   //表属性个数
   const attSize = table.table_attributes.length
   //属性间隔度数
   const degree = 360 / attSize
   //计算线长
-  let lineLength = Math.abs(shapeWidth/1.5 / Math.tan(((2 * Math.PI) / 360) *(degree / 2)))
+  let lineLength = Math.abs(shapeWidth / 1.5 / Math.tan(((2 * Math.PI) / 360) * (degree / 2)))
   if (lineLength < shapeHeight * 2) lineLength = 2 * shapeWidth
 
   const centreLength = lineLength + shapeWidth
@@ -121,15 +115,11 @@ const getTabelEr = (canvas:HTMLCanvasElement,table: TableDocData) => {
     x: centreLength - shapeWidth / 2,
     y: centreLength - shapeHeight / 2
   })
-  console.log(erEList)
   //计算椭圆位置
-  // const canvas = document.createElement('canvas')
-  canvas.height = centreLength * 2
-  canvas.width = centreLength * 2
-
+  const canvas = new OffscreenCanvas(centreLength * 2, centreLength * 2)
   // canvas.style.width=centreLength*2+'px'
   // canvas.style.height=centreLength*2+'px'
-  const ctx = canvas.getContext('2d')!
+  const ctx = canvas.getContext('2d')! as OffscreenCanvasRenderingContext2D
 
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -154,41 +144,48 @@ const getTabelEr = (canvas:HTMLCanvasElement,table: TableDocData) => {
     // 画文字
     drawText(ctx, shape.text, shape.x, shape.y)
   })
-  return getMinCanvas(canvas, ctx)
+  return getMinCanvas(canvas)
 }
 
 export const exportEr = async (name: string, data: Array<TableDocData>) => {
-  let canvas: HTMLCanvasElement=document.createElement('canvas'),temCanvas:HTMLCanvasElement
+  let temCanvas: OffscreenCanvas
   const zip = new JSZip()
   //创建一个名为folder的文件夹
-  const folder = zip.folder(`${name}-ER图`)
+  // const folder = zip.folder(`${name}-ER图`)
   //再folder里面创建一个名为"文件"的txt文件，并写入hello world
   let item: TableDocData
+  let start = Date.now()
   for (let i = 0; i < data.length; i++) {
     item = data[i]
-    temCanvas = getTabelEr(canvas,item)
-    // newCanvas = await html2canvas(canvas, {
-    //   allowTaint: true,
-    //   useCORS: true,
-    //   scale: window.devicePixelRatio // 可以避免模糊
-    // })
-    let img = temCanvas.toDataURL()
-    // const el = document.getElementById('canvas')!
-    // el.innerHTML = ''
-    // const picture = new Image()
-    // picture.src = img
-    // el.appendChild(picture)
-    img = changeDpiDataUrl(img, 400);
-    img = img.replace(/data:image\/\w+;base64,/, '')
-
-    folder?.file(`${item.table_info.table_name}-ER图.png`, img, { base64: true })
+    temCanvas = getTabelEr(item)
+    let imgBlob = await temCanvas!.convertToBlob({
+      type:'image/png',
+      quality:1
+    })
+    let reader = new FileReaderSync();
+    let result=await reader.readAsDataURL(imgBlob) as string;
+    console.log(result)
+    // img = reader.result? as string .replace(/data:image\/\w+;base64,/, '')
+    zip?.file(`${item.table_info.table_name}-ER图.png`,result.split(',')[1] , { base64: true })
+    // img = changeDpiDataUrl(img, 400)
   }
+  let end = Date.now()
+  console.log('er图耗时：', end - start)
   //将文件压缩
   zip
     .generateAsync({
       type: 'blob'
     })
     .then((content) => {
-      saveAs(content, `${name}-ER图.zip`)
+      postMessage(content)
     })
+}
+self.onmessage=(msg)=>{
+  console.log(msg)
+  const data=JSON.parse(msg.data)
+  shapeHeight*=data.dpr
+  shapeWidth*=data.dpr
+  fontSize*=data.dpr
+  lineWidth*=data.dpr
+  exportEr(data.name,data.data)
 }
