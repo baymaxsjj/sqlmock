@@ -147,7 +147,7 @@ const getTabelEr = (table: TableDocData) => {
   return getMinCanvas(canvas)
 }
 
-export const exportEr = async (name: string, data: Array<TableDocData>) => {
+export const exportEr = async (data: Array<TableDocData>) => {
   let temCanvas: OffscreenCanvas
   const zip = new JSZip()
   //创建一个名为folder的文件夹
@@ -187,5 +187,5 @@ self.onmessage=(msg)=>{
   shapeWidth*=data.dpr
   fontSize*=data.dpr
   lineWidth*=data.dpr
-  exportEr(data.name,data.data)
+  exportEr(data.data)
 }
